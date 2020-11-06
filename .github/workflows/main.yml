@@ -23,7 +23,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
         tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        release_name: test
         body: |
           Changes in this Release
           - First Change
@@ -34,8 +34,10 @@ jobs:
     - name: Delete Release
       id: delete_release
       uses: liudonghua123/delete-release-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        release_name: Release ${{ github.ref }}
+        release_name: test
     # Get the output from the `delete_release` step
     - name: Get the output delete_release
       run: echo "The deleted_assets was ${{ steps.delete_release.outputs.deleted_assets }}"
