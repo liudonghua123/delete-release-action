@@ -14,7 +14,7 @@ async function main() {
   const release_name = core.getInput('release_name');
   const release_id = core.getInput('release_id');
   const suppress_errors = Boolean(core.getInput('suppress_errors'));
-  core.log(
+  core.info(
     `Input of action, release_name: ${release_name}, release_id: ${release_id}, suppress_errors: ${suppress_errors}`,
   );
   if (!release_name && !release_id) {
@@ -26,7 +26,7 @@ async function main() {
   }
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2);
-  core.log(`The event payload: ${payload}`);
+  core.info(`The event payload: ${payload}`);
 
   // Get authenticated GitHub client (Ocktokit): https://github.com/actions/toolkit/tree/master/packages/github#usage
   const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
