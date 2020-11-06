@@ -6,38 +6,31 @@ name: Node.js CI
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 jobs:
-  delete-release-action_job:
+  # make sure build/ci work properly
+  build:
     runs-on: ubuntu-latest
-    name: delete-release-action
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    # Create a test release
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: test
-        body: |
-          Changes in this Release
-          - First Change
-          - Second Change
-        draft: false
-        prerelease: false
-    # Delete the release created previous
-    - name: Delete Release
-      id: delete_release
-      uses: liudonghua123/delete-release-action@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        release_name: test
-    # Get the output from the `delete_release` step
-    - name: Get the output delete_release
-      run: echo "The deleted_assets was ${{ steps.delete_release.outputs.deleted_assets }}"
+      - uses: actions/checkout@v2
+      - run: |
+          npm install
+      - run: |
+          npm run lint
+          npm run build
+  # make sure the action works on a clean machine without building
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        id: delete_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_name: test
+          suppress_errors: true
+      # Get the output from the `delete_release` step
+      - name: Get the output delete_release
+        run: echo "The deleted_assets was ${{ steps.delete_release.outputs.deleted_assets }}"
