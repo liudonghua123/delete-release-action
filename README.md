@@ -26,18 +26,20 @@ If the provided `release_name` or `release_id` is not correct. This action will 
 
 The deleted assets while delete the release.
 
-
 ## How to contribute
 
-1. git clone https://github.com/liudonghua123/delete-release-action
-2. cd delete-release-action
-3. npm i
-4. add features or fix bugs
-5. npm run build
-6. git push or send pull requests
+1. fork the repo
+2. git clone the forked repo
+3. cd the forked repo
+4. npm i
+5. add features or fix bugs
+6. npm run build
+7. git push and send pull requests
 
 ## Example usage
 
+```yaml
 uses: liudonghua123/delete-release-action
 with:
   release_name: 'latest'
+```
