@@ -2,105 +2,6 @@ module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 932:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-/* eslint-disable camelcase */
-const core = __webpack_require__(186);
-const github = __webpack_require__(438);
-
-function processFailOrWarning(message, suppress_errors) {
-  if (suppress_errors) {
-    core.warning(message);
-  } else {
-    core.setFailed(message);
-  }
-}
-
-async function main() {
-  const release_name = core.getInput('release_name');
-  const release_id = core.getInput('release_id');
-  const suppress_errors = Boolean(core.getInput('suppress_errors'));
-  core.info(
-    `Input of action, release_name: ${release_name}, release_id: ${release_id}, suppress_errors: ${suppress_errors}`,
-  );
-  if (!release_name && !release_id) {
-    processFailOrWarning(
-      `release_name or release_id should provided! You input release_name: ${release_name}, release_id: ${release_id}`,
-      suppress_errors,
-    );
-    return;
-  }
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2);
-  core.info(`The event payload: ${payload}`);
-
-  // Get authenticated GitHub client (Ocktokit): https://github.com/actions/toolkit/tree/master/packages/github#usage
-  const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
-  const { owner, repo } = github.context.repo;
-
-  try {
-    // make a rule: release_id has high priority then release_name
-    // list all release and find the release according to the id or name
-    const { data: releases } = await octokit.repos.listReleases({
-      owner,
-      repo,
-    });
-    let filtered_releases;
-    if (release_id) {
-      filtered_releases = releases.filter(
-        (release) => release.id === release_id,
-      );
-      if (filtered_releases.length === 0) {
-        processFailOrWarning(
-          `Could not find any release with the id of ${release_id}`,
-          suppress_errors,
-        );
-        return;
-      }
-    } else {
-      filtered_releases = releases.filter(
-        (release) => release.name === release_name,
-      );
-      if (filtered_releases.length === 0) {
-        processFailOrWarning(
-          `Could not find any release with the name of ${release_name}`,
-          suppress_errors,
-        );
-        return;
-      }
-      if (filtered_releases.length > 1) {
-        processFailOrWarning(
-          `Find more than one release with the name of ${release_name}`,
-          suppress_errors,
-        );
-        return;
-      }
-    }
-    const { assets } = filtered_releases[0];
-    core.info(`Prepare to delete assets: ${assets}`);
-    const deleted_assets = [];
-    assets.forEach(async ({ id: asset_id, name: asset_name }) => {
-      try {
-        await octokit.repos.deleteReleaseAsset({ owner, repo, asset_id });
-        deleted_assets.push(asset_name);
-      } catch (error) {
-        core.warning(`Caught ${error}`);
-      }
-    });
-    core.setOutput('deleted_assets', deleted_assets);
-    // delete the release
-    await octokit.repos.deleteRelease({ owner, repo, release_id });
-  } catch (error) {
-    processFailOrWarning(error.message, suppress_errors);
-  }
-}
-
-main();
-
-
-/***/ }),
-
 /***/ 351:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -3378,7 +3279,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var deprecation = __webpack_require__(481);
+var deprecation = __webpack_require__(932);
 var once = _interopDefault(__webpack_require__(223));
 
 const logOnce = once(deprecation => console.warn(deprecation));
@@ -3763,7 +3664,7 @@ function removeHook (state, name, method) {
 
 /***/ }),
 
-/***/ 481:
+/***/ 932:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -5889,6 +5790,102 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 177:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core_1 = __importDefault(__webpack_require__(186));
+const github_1 = __importDefault(__webpack_require__(438));
+function processFailOrWarning(message, suppress_errors) {
+    if (suppress_errors) {
+        core_1.default.warning(message);
+    }
+    else {
+        core_1.default.setFailed(message);
+    }
+}
+function main() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const release_name = core_1.default.getInput('release_name');
+        const release_id = Number(core_1.default.getInput('release_id'));
+        const suppress_errors = Boolean(core_1.default.getInput('suppress_errors'));
+        core_1.default.info(`Input of action, release_name: ${release_name}, release_id: ${release_id}, suppress_errors: ${suppress_errors}`);
+        if (!release_name && !release_id) {
+            processFailOrWarning(`release_name or release_id should provided! You input release_name: ${release_name}, release_id: ${release_id}`, suppress_errors);
+            return;
+        }
+        // Get the JSON webhook payload for the event that triggered the workflow
+        const payload = JSON.stringify(github_1.default.context.payload, undefined, 2);
+        core_1.default.info(`The event payload: ${payload}`);
+        // Get authenticated GitHub client (Ocktokit): https://github.com/actions/toolkit/tree/master/packages/github#usage
+        const octokit = github_1.default.getOctokit(process.env.GITHUB_TOKEN);
+        const { owner, repo } = github_1.default.context.repo;
+        try {
+            // make a rule: release_id has high priority then release_name
+            // list all release and find the release according to the id or name
+            const { data: releases } = yield octokit.repos.listReleases({
+                owner,
+                repo,
+            });
+            let filtered_releases;
+            if (release_id) {
+                filtered_releases = releases.filter((release) => release.id === release_id);
+                if (filtered_releases.length === 0) {
+                    processFailOrWarning(`Could not find any release with the id of ${release_id}`, suppress_errors);
+                    return;
+                }
+            }
+            else {
+                filtered_releases = releases.filter((release) => release.name === release_name);
+                if (filtered_releases.length === 0) {
+                    processFailOrWarning(`Could not find any release with the name of ${release_name}`, suppress_errors);
+                    return;
+                }
+                if (filtered_releases.length > 1) {
+                    processFailOrWarning(`Find more than one release with the name of ${release_name}`, suppress_errors);
+                    return;
+                }
+            }
+            const { assets } = filtered_releases[0];
+            core_1.default.info(`Prepare to delete assets: ${assets}`);
+            const deleted_assets = [];
+            assets.forEach(({ id: asset_id, name: asset_name }) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    yield octokit.repos.deleteReleaseAsset({ owner, repo, asset_id });
+                    deleted_assets.push(asset_name);
+                }
+                catch (error) {
+                    core_1.default.warning(`Caught ${error}`);
+                }
+            }));
+            core_1.default.setOutput('deleted_assets', deleted_assets);
+            // delete the release
+            yield octokit.repos.deleteRelease({ owner, repo, release_id });
+        }
+        catch (error) {
+            processFailOrWarning(error.message, suppress_errors);
+        }
+    });
+}
+main();
+
+
+/***/ }),
+
 /***/ 877:
 /***/ ((module) => {
 
@@ -6039,6 +6036,6 @@ module.exports = require("zlib");;
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(932);
+/******/ 	return __webpack_require__(177);
 /******/ })()
 ;

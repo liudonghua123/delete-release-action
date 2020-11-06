@@ -1,8 +1,7 @@
-/* eslint-disable camelcase */
-const core = require('@actions/core');
-const github = require('@actions/github');
+import core from '@actions/core';
+import github from '@actions/github';
 
-function processFailOrWarning(message, suppress_errors) {
+function processFailOrWarning(message: string, suppress_errors: boolean) {
   if (suppress_errors) {
     core.warning(message);
   } else {
@@ -12,7 +11,7 @@ function processFailOrWarning(message, suppress_errors) {
 
 async function main() {
   const release_name = core.getInput('release_name');
-  const release_id = core.getInput('release_id');
+  const release_id = Number(core.getInput('release_id'));
   const suppress_errors = Boolean(core.getInput('suppress_errors'));
   core.info(
     `Input of action, release_name: ${release_name}, release_id: ${release_id}, suppress_errors: ${suppress_errors}`,
@@ -29,7 +28,7 @@ async function main() {
   core.info(`The event payload: ${payload}`);
 
   // Get authenticated GitHub client (Ocktokit): https://github.com/actions/toolkit/tree/master/packages/github#usage
-  const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+  const octokit = github.getOctokit(process.env.GITHUB_TOKEN!);
   const { owner, repo } = github.context.repo;
 
   try {
@@ -42,7 +41,7 @@ async function main() {
     let filtered_releases;
     if (release_id) {
       filtered_releases = releases.filter(
-        (release) => release.id === release_id,
+        (release: { id: any; }) => release.id === release_id,
       );
       if (filtered_releases.length === 0) {
         processFailOrWarning(
@@ -53,7 +52,7 @@ async function main() {
       }
     } else {
       filtered_releases = releases.filter(
-        (release) => release.name === release_name,
+        (release: { name: any; }) => release.name === release_name,
       );
       if (filtered_releases.length === 0) {
         processFailOrWarning(
@@ -72,7 +71,7 @@ async function main() {
     }
     const { assets } = filtered_releases[0];
     core.info(`Prepare to delete assets: ${assets}`);
-    const deleted_assets = [];
+    const deleted_assets: any[] = [];
     assets.forEach(async ({ id: asset_id, name: asset_name }) => {
       try {
         await octokit.repos.deleteReleaseAsset({ owner, repo, asset_id });

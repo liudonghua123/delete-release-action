@@ -2,9 +2,9 @@
   "name": "delete-release-action",
   "version": "1.0.0",
   "description": "It's a simple github action which delete a release with all of its assets.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "ncc build index.js --license LICENSE",
+    "build": "ncc build index.ts --license LICENSE",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix"
   },
@@ -30,6 +30,7 @@
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "typescript": "^4.0.5"
   }
 }
