@@ -5818,7 +5818,7 @@ function processFailOrWarning(message, suppress_errors) {
         core_1.default.setFailed(message);
     }
 }
-function main() {
+function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const release_name = core_1.default.getInput('release_name');
         const release_id = Number(core_1.default.getInput('release_id'));
@@ -5881,7 +5881,7 @@ function main() {
         }
     });
 }
-main();
+run();
 
 
 /***/ }),

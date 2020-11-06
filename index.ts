@@ -9,7 +9,7 @@ function processFailOrWarning(message: string, suppress_errors: boolean) {
   }
 }
 
-async function main() {
+async function run() {
   const release_name = core.getInput('release_name');
   const release_id = Number(core.getInput('release_id'));
   const suppress_errors = Boolean(core.getInput('suppress_errors'));
@@ -88,4 +88,4 @@ async function main() {
   }
 }
 
-main();
+run();
