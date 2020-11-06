@@ -1,6 +1,5 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
-main: 'dist/index.js'
+name: 'Delete a Release'
+description: 'delete a release according to its id or name'
 inputs:
   release_name:  # name of release
     description: 'The name of a release which want to delete'
@@ -17,7 +16,7 @@ outputs:
     description: 'The asset files which deleted when delete the release'
 runs:
   using: 'node12'
-  main: 'index.js'
+  main: 'dist/index.js'
 branding:
   icon: 'package'
   color: 'gray-dark'

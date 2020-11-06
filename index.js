@@ -14,7 +14,10 @@ async function main() {
   const release_name = core.getInput('release_name');
   const release_id = core.getInput('release_id');
   const suppress_errors = Boolean(core.getInput('suppress_errors'));
-  if (!release_name || !release_id) {
+  core.log(
+    `Input of action, release_name: ${release_name}, release_id: ${release_id}, suppress_errors: ${suppress_errors}`,
+  );
+  if (!release_name && !release_id) {
     processFailOrWarning(
       `release_name or release_id should provided! You input release_name: ${release_name}, release_id: ${release_id}`,
       suppress_errors,
