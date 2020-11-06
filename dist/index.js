@@ -5795,6 +5795,25 @@ function wrappy (fn, cb) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -5804,36 +5823,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__webpack_require__(186));
-const github_1 = __importDefault(__webpack_require__(438));
+const core = __importStar(__webpack_require__(186));
+const github = __importStar(__webpack_require__(438));
 function processFailOrWarning(message, suppress_errors) {
     if (suppress_errors) {
-        core_1.default.warning(message);
+        core.warning(message);
     }
     else {
-        core_1.default.setFailed(message);
+        core.setFailed(message);
     }
 }
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        const release_name = core_1.default.getInput('release_name');
-        const release_id = Number(core_1.default.getInput('release_id'));
-        const suppress_errors = Boolean(core_1.default.getInput('suppress_errors'));
-        core_1.default.info(`Input of action, release_name: ${release_name}, release_id: ${release_id}, suppress_errors: ${suppress_errors}`);
+        const release_name = core.getInput('release_name');
+        const release_id = Number(core.getInput('release_id'));
+        const suppress_errors = Boolean(core.getInput('suppress_errors'));
+        core.info(`Input of action, release_name: ${release_name}, release_id: ${release_id}, suppress_errors: ${suppress_errors}`);
         if (!release_name && !release_id) {
             processFailOrWarning(`release_name or release_id should provided! You input release_name: ${release_name}, release_id: ${release_id}`, suppress_errors);
             return;
         }
         // Get the JSON webhook payload for the event that triggered the workflow
-        const payload = JSON.stringify(github_1.default.context.payload, undefined, 2);
-        core_1.default.info(`The event payload: ${payload}`);
+        const payload = JSON.stringify(github.context.payload, undefined, 2);
+        core.info(`The event payload: ${payload}`);
         // Get authenticated GitHub client (Ocktokit): https://github.com/actions/toolkit/tree/master/packages/github#usage
-        const octokit = github_1.default.getOctokit(process.env.GITHUB_TOKEN);
-        const { owner, repo } = github_1.default.context.repo;
+        const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+        const { owner, repo } = github.context.repo;
         try {
             // make a rule: release_id has high priority then release_name
             // list all release and find the release according to the id or name
@@ -5861,7 +5877,7 @@ function run() {
                 }
             }
             const { assets } = filtered_releases[0];
-            core_1.default.info(`Prepare to delete assets: ${assets}`);
+            core.info(`Prepare to delete assets: ${assets}`);
             const deleted_assets = [];
             assets.forEach(({ id: asset_id, name: asset_name }) => __awaiter(this, void 0, void 0, function* () {
                 try {
@@ -5869,10 +5885,10 @@ function run() {
                     deleted_assets.push(asset_name);
                 }
                 catch (error) {
-                    core_1.default.warning(`Caught ${error}`);
+                    core.warning(`Caught ${error}`);
                 }
             }));
-            core_1.default.setOutput('deleted_assets', deleted_assets);
+            core.setOutput('deleted_assets', deleted_assets);
             // delete the release
             yield octokit.repos.deleteRelease({ owner, repo, release_id });
         }
