@@ -39,7 +39,7 @@ The deleted assets while delete the release.
 ## Example usage
 
 ```yaml
-uses: liudonghua123/delete-release-action
+uses: liudonghua123/delete-release-action@v1
 with:
   release_name: 'latest'
 ```
