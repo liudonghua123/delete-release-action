@@ -1,0 +1,42 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  delete-release-action_job:
+    runs-on: ubuntu-latest
+    name: delete-release-action
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    # Create a test release
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          Changes in this Release
+          - First Change
+          - Second Change
+        draft: false
+        prerelease: false
+    # Delete the release created previous
+    - name: Delete Release
+      id: delete_release
+      uses: liudonghua123/delete-release-action@v1
+      with:
+        release_name: Release ${{ github.ref }}
+    # Get the output from the `delete_release` step
+    - name: Get the output delete_release
+      run: echo "The time was ${{ steps.delete_release.outputs.deleted_assets }}"
