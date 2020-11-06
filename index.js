@@ -35,7 +35,7 @@ async function main() {
   try {
     // make a rule: release_id has high priority then release_name
     // list all release and find the release according to the id or name
-    const releases = await octokit.repos.listReleases({
+    const { data: releases } = await octokit.repos.listReleases({
       owner,
       repo,
     });
