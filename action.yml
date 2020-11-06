@@ -1,0 +1,23 @@
+name: 'Hello World'
+description: 'Greet someone and record the time'
+main: 'dist/index.js'
+inputs:
+  release_name:  # name of release
+    description: 'The name of a release which want to delete'
+    required: false
+  release_id:  # id of release
+    description: 'The id of a release which want to delete'
+    required: false
+  suppress_errors:  # whether suppress errors or not
+    description: 'Whether suppress errors or not'
+    required: false
+    default: false
+outputs:
+  deleted_assets:
+    description: 'The asset files which deleted when delete the release'
+runs:
+  using: 'node12'
+  main: 'index.js'
+branding:
+  icon: 'package'
+  color: 'gray-dark'

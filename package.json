@@ -1,0 +1,35 @@
+{
+  "name": "delete-release-action",
+  "version": "1.0.0",
+  "description": "It's a simple github action which delete a release with all of its assets.",
+  "main": "index.js",
+  "scripts": {
+    "build": "ncc build index.js --license LICENSE",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liudonghua123/delete-release-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liudonghua123/delete-release-action/issues"
+  },
+  "homepage": "https://github.com/liudonghua123/delete-release-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.25.0",
+    "eslint": "^7.12.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.1.2"
+  }
+}
