@@ -34,7 +34,7 @@ async function run() {
   try {
     // make a rule: release_id has high priority then release_name
     // list all release and find the release according to the id or name
-    const { data: releases } = await octokit.repos.listReleases({
+    const { data: releases } = await octokit.rest.repos.listReleases({
       owner,
       repo,
     });
@@ -74,7 +74,7 @@ async function run() {
     const deleted_assets: any[] = [];
     assets.forEach(async ({ id: asset_id, name: asset_name }) => {
       try {
-        await octokit.repos.deleteReleaseAsset({ owner, repo, asset_id });
+        await octokit.rest.repos.deleteReleaseAsset({ owner, repo, asset_id });
         deleted_assets.push(asset_name);
       } catch (error) {
         core.warning(`Caught ${error}`);
@@ -82,8 +82,8 @@ async function run() {
     });
     core.setOutput('deleted_assets', deleted_assets);
     // delete the release
-    await octokit.repos.deleteRelease({ owner, repo, release_id });
-  } catch (error) {
+    await octokit.rest.repos.deleteRelease({ owner, repo, release_id });
+  } catch (error: any) {
     processFailOrWarning(error.message, suppress_errors);
   }
 }
