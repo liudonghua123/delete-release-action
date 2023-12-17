@@ -1,6 +1,6 @@
 # delete-release-action
 
-This action delete a release and all of its assets.
+This action deletes a release and all of its assets.
 
 ## Inputs
 
@@ -18,7 +18,7 @@ This action delete a release and all of its assets.
 
 Notice: *Must provide a valid release_name or release_id*
 
-If the provided `release_name` or `release_id` is not correct. This action will failed and log the detailed error message or just log the detailed error message if `suppress_errors` is true.
+If the provided `release_name` or `release_id` is not correct. This action will fail and log the detailed error message or just log the detailed error message if `suppress_errors` is true.
 
 ## Outputs
 
