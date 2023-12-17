@@ -15,7 +15,7 @@ outputs:
   deleted_assets:
     description: 'The asset files which deleted when delete the release'
 runs:
-  using: 'node12'
+  using: 'node20'
   main: 'dist/index.js'
 branding:
   icon: 'package'
